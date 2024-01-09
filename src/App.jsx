@@ -1,13 +1,20 @@
 import { useState } from "react";
+import InputForm from "./components/InputForm";
+import styled from "styled-components";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <DIV>
+      <InputForm/>
+    </DIV>
   );
 }
 
 export default App;
+
+const DIV=styled.div`
+  display: flex;
+  justify-content: center;
+`
