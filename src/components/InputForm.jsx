@@ -1,20 +1,23 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setSortingInput } from "../redux/slices/sortSlice";
 
 const InputForm = () => {
   const [array, setArray] = useState("");
   const [order, setOrder] = useState("");
+  const dispatch=useDispatch()
 
   const handleSearch = (e) => {
     e.preventDefault();
     const arrayInput = array.split(",").map((num) => parseInt(num, 10));
-
-    console.log(arrayInput, order);
+    dispatch(setSortingInput({arrayInput,order}))
+    // console.log(arrayInput, order);
   };
   return (
     <DIV>
       <form onSubmit={handleSearch}>
-        <h1>Bubble sorting</h1>
+        <h2>Bubble sorting</h2>
         <div>
           <label>Input Array</label>
           <input
@@ -43,9 +46,16 @@ const InputForm = () => {
 export default InputForm;
 
 const DIV = styled.div`
+  width: 35%;
+  margin: auto;
+  margin-top: 50px;
+  text-align: center;
   form {
     display: flex;
     flex-direction: column;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     gap: 20px;
     div {
       display: flex;
