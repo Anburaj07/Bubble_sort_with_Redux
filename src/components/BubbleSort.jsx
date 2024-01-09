@@ -6,7 +6,7 @@ const BubbleSort = () => {
   const sortInput = useSelector((store) => store.sort);
   let originalArray = sortInput.array;
   let order = sortInput.order;
-
+  const [indArray,setIndArray]=useState([]);
   const bubbleSort = (arr, order) => {
     let steps = [];
     let newArray = [...arr]; // Create a shallow copy of the array
@@ -15,9 +15,12 @@ const BubbleSort = () => {
     for (let i = 0; i < n - 1; i++) {
       let flag = 0;
       for (let j = 0; j < n - i - 1; j++) {
-        if ((order === "asc" && newArray[j] > newArray[j + 1]) ||
-            (order === "desc" && newArray[j] < newArray[j + 1])) {
+        if (
+          (order === "asc" && newArray[j] > newArray[j + 1]) ||
+          (order === "desc" && newArray[j] < newArray[j + 1])
+        ) {
           flag = 1;
+          setIndArray((prev)=>[...prev,j])
           let temp = newArray[j];
           newArray[j] = newArray[j + 1];
           newArray[j + 1] = temp;
@@ -40,16 +43,39 @@ const BubbleSort = () => {
       setSteps(sortedSteps);
     }
   }, [originalArray, order]);
-  console.log(steps)
+  console.log(indArray,'indArray');
   return (
     <DIV>
       <h2>Stpes for BubbleSort</h2>
-      <div >
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <p style={{ paddingRight: "15px" }}>Step 0</p>
+        {originalArray.map((el, ind) => (
+          <BOX key={ind} swap={originalArray[indArray[0]]==el}>
+            {el}
+          </BOX>
+        ))}
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          gap: "20px",
+        }}
+      >
         {steps.map((step, index) => (
-            <div style={{ display: "flex", justifyContent: "center"}}>
-                {step.map((num,ind)=>(<BOX key={ind}>{num}</BOX>))}
-            </div>
-          
+          <div key={index} style={{ display: "flex", justifyContent: "center" }}>
+            <p style={{ paddingRight: "15px" }}>Step {index + 1}</p>{" "}
+            {step.map((num, ind) => (
+              <BOX
+                key={ind}
+                swap={originalArray[indArray[index+1]]==num}
+              >
+                {num}
+              </BOX>
+            ))}
+          </div>
         ))}
       </div>
     </DIV>
@@ -59,7 +85,7 @@ const BubbleSort = () => {
 export default BubbleSort;
 
 const DIV = styled.div`
-text-align: center;
+  text-align: center;
   width: 45%;
   margin: auto;
   margin-top: 50px;
@@ -67,11 +93,14 @@ text-align: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: #64c764;
+  background-color: #077979;
   border-radius: 10px;
   padding: 2%;
   h2 {
-    color: #a31188;
+    color: #580348;
+  }
+  p {
+    color: #15043c;
   }
 
   h1 {
@@ -88,4 +117,5 @@ const BOX = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: ${(props) => (props.swap ? "#ff5722" : "#bc20b7")};
 `;
