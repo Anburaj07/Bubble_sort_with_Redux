@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { setSortingArray } from "../redux/slices/sortArraySlice";
@@ -7,23 +7,21 @@ import { setSortingOrder } from "../redux/slices/sortOrderSlice";
 const InputForm = () => {
   const [array, setArray] = useState("");
   const [order, setOrder] = useState("");
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
-  
   const handleSearch = (e) => {
     e.preventDefault();
     const arrayInput = array.split(",").map((num) => parseInt(num, 10));
-    let newArray=bubbleSort(arrayInput, order);
-    // console.log('newArray:', newArray)
-    dispatch(setSortingArray(newArray))
-    dispatch(setSortingOrder(order))
+    let [newArray, obj] = bubbleSort(arrayInput, order);
+    dispatch(setSortingArray({ newArray, obj }));
+    dispatch(setSortingOrder(order));
   };
-  
-  const [indArray,setIndArray]=useState([]);
+
   const bubbleSort = (arr, order) => {
     let steps = [];
     let newArray = [...arr]; // shallow copy of the array
-
+    let obj = {};
+    let noOfSteps = 0;
     let n = newArray.length;
     for (let i = 0; i < n - 1; i++) {
       let flag = 0;
@@ -37,6 +35,7 @@ const InputForm = () => {
           let temp = newArray[j];
           newArray[j] = newArray[j + 1];
           newArray[j + 1] = temp;
+          obj[noOfSteps++] = [j, j + 1];
           steps.push([...newArray]); // Copy of the current state
         }
       }
@@ -45,7 +44,7 @@ const InputForm = () => {
       }
     }
 
-    return steps; // Return the array of steps
+    return [steps, obj]; // Return the array of steps and indexes to change
   };
 
   return (

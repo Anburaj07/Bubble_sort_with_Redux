@@ -5,30 +5,31 @@ import Element from "./Element";
 
 const BubbleSort = () => {
   const sortArray = useSelector((store) => store.sortArray.array);
-  console.log('sortArray:', sortArray)
-  const sortOrder = useSelector((store) => store.sortOrder.order);
-  const [index,setIndex]=useState(0);
-  useEffect(()=>{
-    let intervalID=setInterval(()=>{
-      setIndex((prev)=>{
-        if(!sortArray[prev+1]){
+  const obj = useSelector((store) => store.sortArray.obj);
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    let intervalID = setInterval(() => {
+      setIndex((prev) => {
+        if (!sortArray[prev + 1]) {
           clearInterval(intervalID);
-          return prev
+          return prev;
         }
-        return prev+1
-      })
-    },1000)
+        return prev + 1;
+      });
+    }, 1000);
 
-    return ()=>{
-      clearInterval(intervalID)
-    }
-  },[])
-  console.log(index)
+    return () => {
+      clearInterval(intervalID);
+    };
+  }, []);
+  console.log(index);
   return (
     <DIV>
-      {sortArray[index]?.map((el, ind) => (
-        <Element key={ind} val={el} />
-      ))}
+      {sortArray[index]?.map((el, ind) => {
+        let coloredIndex = obj[index];
+        let isColorToChange = coloredIndex.includes(ind);
+        return <Element key={ind} val={el} isColorToChange={isColorToChange} />;
+      })}
     </DIV>
   );
 };
@@ -36,7 +37,7 @@ const BubbleSort = () => {
 export default BubbleSort;
 
 const DIV = styled.div`
-  width: 60%;
+  width: 40%;
   margin: auto;
   margin-top: 50px;
   display: flex;
