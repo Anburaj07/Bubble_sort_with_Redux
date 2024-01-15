@@ -1,19 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { setSortingInput } from "../redux/slices/sortSlice";
+import { setSortingArray } from "../redux/slices/sortArraySlice";
+import { setSortingOrder } from "../redux/slices/sortOrderSlice";
 
 const InputForm = () => {
   const [array, setArray] = useState("");
   const [order, setOrder] = useState("");
   const dispatch=useDispatch()
 
+  
   const handleSearch = (e) => {
     e.preventDefault();
     const arrayInput = array.split(",").map((num) => parseInt(num, 10));
-    dispatch(setSortingInput({arrayInput,order}))
-    // console.log(arrayInput, order);
+    let newArray=bubbleSort(arrayInput, order);
+    // console.log('newArray:', newArray)
+    dispatch(setSortingArray(newArray))
+    dispatch(setSortingOrder(order))
   };
+  
+  const [indArray,setIndArray]=useState([]);
+  const bubbleSort = (arr, order) => {
+    let steps = [];
+    let newArray = [...arr]; // shallow copy of the array
+
+    let n = newArray.length;
+    for (let i = 0; i < n - 1; i++) {
+      let flag = 0;
+      for (let j = 0; j < n - i - 1; j++) {
+        if (
+          (order === "asc" && newArray[j] > newArray[j + 1]) ||
+          (order === "desc" && newArray[j] < newArray[j + 1])
+        ) {
+          flag = 1;
+          // setIndArray((prev)=>[...prev,j])
+          let temp = newArray[j];
+          newArray[j] = newArray[j + 1];
+          newArray[j + 1] = temp;
+          steps.push([...newArray]); // Copy of the current state
+        }
+      }
+      if (!flag) {
+        break;
+      }
+    }
+
+    return steps; // Return the array of steps
+  };
+
   return (
     <DIV>
       <form onSubmit={handleSearch}>

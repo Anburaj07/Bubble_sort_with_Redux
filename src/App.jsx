@@ -1,24 +1,18 @@
-import { useState } from "react";
 import InputForm from "./components/InputForm";
-import styled from "styled-components";
 import { useSelector } from "react-redux";
 import BubbleSort from "./components/BubbleSort";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const sortOrder=useSelector((store)=>store.sort.order);
-  console.log('sortOrder:', sortOrder)
+  const sortArray=useSelector((store)=>store.sortArray.array)
+  const sortOrder=useSelector((store)=>store.sortOrder.order)
+  // console.log('sortArray:', sortArray)
+  // console.log('sortOrder:', sortOrder)
   return (
-    <DIV>
+    <div>
       <InputForm/>
       {sortOrder&& <BubbleSort/>}
-    </DIV>
+    </div>
   );
 }
 
 export default App;
-
-const DIV=styled.div`
-  display: flex;
-  justify-content: center;
-`

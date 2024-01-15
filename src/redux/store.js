@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import sortReducer from "./slices/sortSlice";
+import sortOrderSlice from "./slices/sortOrderSlice";
+import sortArraySlice from "./slices/sortArraySlice";
 const store = configureStore({
   reducer: {
-    sort: sortReducer,
+    sortArray: sortArraySlice,
+    sortOrder: sortOrderSlice,
   },
 });
 
