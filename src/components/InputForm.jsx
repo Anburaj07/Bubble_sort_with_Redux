@@ -12,10 +12,13 @@ const InputForm = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const arrayInput = array.split(",").map((num) => parseInt(num, 10));
-    if(arrayInput.length<=1){
-      alert("Please enter atleast two numbers!")
-      return
+
+    //Input Validation
+    if (arrayInput.length <= 1) {
+      alert("Please enter atleast two numbers!");
+      return;
     }
+
     let [newArray, sortedIndex] = bubbleSort(arrayInput, order);
     dispatch(setSortingArray({ newArray, sortedIndex }));
     dispatch(setSortingOrder(order));
@@ -43,8 +46,8 @@ const InputForm = () => {
         }
       }
       if (!flag) {
-        sortedIndex[noOfSteps++] = [-1,-1];
-        steps.push([...newArray])
+        sortedIndex[noOfSteps++] = [-1, -1];
+        steps.push([...newArray]);
         break;
       }
     }
