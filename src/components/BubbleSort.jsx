@@ -5,7 +5,8 @@ import Element from "./Element";
 
 const BubbleSort = () => {
   const sortArray = useSelector((store) => store.sortArray.array);
-  const obj = useSelector((store) => store.sortArray.obj);
+  const sortedIndex = useSelector((store) => store.sortArray.sortedIndex);
+  const sortOrder = useSelector((store) => store.sortOrder.order);
   const [index, setIndex] = useState(0);
   useEffect(() => {
     let intervalID = setInterval(() => {
@@ -21,12 +22,11 @@ const BubbleSort = () => {
     return () => {
       clearInterval(intervalID);
     };
-  }, []);
-  console.log(index);
+  }, [sortOrder]);
   return (
     <DIV>
       {sortArray[index]?.map((el, ind) => {
-        let coloredIndex = obj[index];
+        let coloredIndex = sortedIndex[index];
         let isColorToChange = coloredIndex.includes(ind);
         return <Element key={ind} val={el} isColorToChange={isColorToChange} />;
       })}

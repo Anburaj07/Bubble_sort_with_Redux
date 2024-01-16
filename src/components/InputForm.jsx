@@ -12,15 +12,19 @@ const InputForm = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     const arrayInput = array.split(",").map((num) => parseInt(num, 10));
-    let [newArray, obj] = bubbleSort(arrayInput, order);
-    dispatch(setSortingArray({ newArray, obj }));
+    if(arrayInput.length<=1){
+      alert("Please enter atleast two numbers!")
+      return
+    }
+    let [newArray, sortedIndex] = bubbleSort(arrayInput, order);
+    dispatch(setSortingArray({ newArray, sortedIndex }));
     dispatch(setSortingOrder(order));
   };
 
   const bubbleSort = (arr, order) => {
     let steps = [];
     let newArray = [...arr]; // shallow copy of the array
-    let obj = {};
+    let sortedIndex = {};
     let noOfSteps = 0;
     let n = newArray.length;
     for (let i = 0; i < n - 1; i++) {
@@ -31,20 +35,21 @@ const InputForm = () => {
           (order === "desc" && newArray[j] < newArray[j + 1])
         ) {
           flag = 1;
-          // setIndArray((prev)=>[...prev,j])
           let temp = newArray[j];
           newArray[j] = newArray[j + 1];
           newArray[j + 1] = temp;
-          obj[noOfSteps++] = [j, j + 1];
+          sortedIndex[noOfSteps++] = [j, j + 1];
           steps.push([...newArray]); // Copy of the current state
         }
       }
       if (!flag) {
+        sortedIndex[noOfSteps++] = [-1,-1];
+        steps.push([...newArray])
         break;
       }
     }
 
-    return [steps, obj]; // Return the array of steps and indexes to change
+    return [steps, sortedIndex]; // Return the array of steps and indexes to change
   };
 
   return (

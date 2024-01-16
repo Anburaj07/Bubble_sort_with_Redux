@@ -4,12 +4,12 @@ const sortArraySlice = createSlice({
   name: "sortInput",
   initialState: {
     array: [],
-    obj: {},
+    sortedIndex: {},
   },
   reducers: {
     setSortingArray: (state, { payload }) => {
       state.array = payload.newArray;
-      state.obj = payload.obj;
+      state.sortedIndex = payload.sortedIndex;
     },
   },
 });
