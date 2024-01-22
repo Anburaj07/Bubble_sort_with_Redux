@@ -9,27 +9,11 @@ const InputForm = () => {
   const [order, setOrder] = useState("");
   const dispatch = useDispatch();
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const arrayInput = array.split(",").map((num) => parseInt(num, 10));
-
-    //Input Validation
-    if (arrayInput.length <= 1) {
-      alert("Please enter atleast two numbers!");
-      return;
-    }
-
-    let [newArray, sortedIndex] = bubbleSort(arrayInput, order);
-    dispatch(setSortingArray({ newArray, sortedIndex }));
-    dispatch(setSortingOrder(order));
-  };
-
-  const bubbleSort = (arr, order) => {
-    let steps = [];
+  const bubbleSort = async (arr, order) => {
     let newArray = [...arr]; // shallow copy of the array
-    let sortedIndex = {};
-    let noOfSteps = 0;
+    let sortedIndex = [];
     let n = newArray.length;
+
     for (let i = 0; i < n - 1; i++) {
       let flag = 0;
       for (let j = 0; j < n - i - 1; j++) {
@@ -41,18 +25,36 @@ const InputForm = () => {
           let temp = newArray[j];
           newArray[j] = newArray[j + 1];
           newArray[j + 1] = temp;
-          sortedIndex[noOfSteps++] = [j, j + 1];
-          steps.push([...newArray]); // Copy of the current state
+
+          sortedIndex = [j, j + 1];
+          dispatch(setSortingArray({ array: [...newArray], sortedIndex }));
+          dispatch(setSortingOrder(order));
+
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       }
       if (!flag) {
-        sortedIndex[noOfSteps++] = [-1, -1];
-        steps.push([...newArray]);
+        sortedIndex = [-1, -1];
+        dispatch(setSortingArray({ array: [...newArray], sortedIndex }));
+        dispatch(setSortingOrder(order));
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         break;
       }
     }
+  };
 
-    return [steps, sortedIndex]; // Return the array of steps and indexes to change
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const arrayInput = array.split(",").map((num) => parseInt(num, 10));
+
+    //Input Validation
+    if (arrayInput.length <= 1) {
+      alert("Please enter atleast two numbers!");
+      return;
+    }
+
+    bubbleSort(arrayInput, order);
   };
 
   return (
